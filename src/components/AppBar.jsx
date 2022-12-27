@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom';
 import { UserMenu } from './UserMenu';
 import { useSelector } from 'react-redux';
+import { getClicksValue } from "../redux/userSlice"
 
 export const AppBar = () => {
-  const isLoggedIn = useSelector(state => state.user.isLoggedIn);
+  const isLoggedIn = useSelector(getClicksValue);
   return (
     <header
       style={{

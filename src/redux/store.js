@@ -1,7 +1,19 @@
+
 import { configureStore } from '@reduxjs/toolkit';
 
-import logger from 'redux-logger';
-import { userSlice } from './userSlice';
+import {
+    persistStore,
+    FLUSH,
+    REHYDRATE,
+    PAUSE,
+    PERSIST,
+    PURGE,
+    REGISTER,
+  } from 'redux-persist'
+
+import { clickReducer } from './userSlice';
+
+// import { clickSlice } from './clickSlice';
 
 // import { myValueSlice } from  './myValue/slice';
 // import { itemsSlice } from  './items/slice';
@@ -21,7 +33,6 @@ import { userSlice } from './userSlice';
 // export const add = createAction('items/add');
 // export const remove = createAction('items/remove');
 
-
 // // IMMER:
 
 // const itemsReducer = createReducer([], {
@@ -29,14 +40,21 @@ import { userSlice } from './userSlice';
 //     [remove]: (state, action) => state.filter(item => item.id !==action.payload),
 // });
 
-
-
 export const store = configureStore({
-    reducer: {
-        // myValue: myValueSlice.reducer,
-        // items: itemsSlice.reducer,
-        user: userSlice.reducer,
-    },
-middleware: getGetDefaultMiddleware => [...getGetDefaultMiddleware(), logger],
+  reducer: {
+    // myValue: myValueSlice.reducer,
+    // items: itemsSlice.reducer,
+  user: clickReducer,
+},
+  middleware(getDefaultMiddleware) {
 
+  return getDefaultMiddleware({
+    serializableCheck: {
+      ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+    },
+  });
+  },
 });
+
+export const persistor = persistStore(store);
+

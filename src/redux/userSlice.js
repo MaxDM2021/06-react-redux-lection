@@ -1,11 +1,17 @@
 import {  createSlice } from '@reduxjs/toolkit';
+import { persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
 
-export const userSlice = createSlice({
+
+const userSlice = createSlice({
     name: 'user',
     initialState: {
         login: "",
-        isLoggedIn: false
+        isLoggedIn: false,
+        a: 1,
+        b: 2, 
+        c: 3,
     },
     reducers: {
         logIn(state, action) {
@@ -19,4 +25,24 @@ export const userSlice = createSlice({
     },
 })
 
+
+const persistConfig = {
+    key: 'user',
+    storage,
+    // whitelist: ['login', 'a'],
+    blacklist: ['c', 'b'],
+  };
+  
+  export const clickReducer = persistReducer(persistConfig, userSlice.reducer);
+  
+
+
+
+
 export const { logIn, logOut } = userSlice.actions;
+
+
+
+// ===== Selectors =====
+
+export const getClicksValue = state => state.user.isLoggedIn;
